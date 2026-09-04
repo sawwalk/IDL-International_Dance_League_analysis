@@ -16,9 +16,9 @@ One row per **team performance** across the four completed 2026 International Da
 | `round` | `Round 1` (standard 1v1 matchup) or `Final` (top 3 teams from each series' three Round 1 matches) |
 | `opponent` | One team name if `round` = Round 1; two comma-separated team names if `round` = Final |
 | `total_score` | Sum of the team's 10 average criteria scores (see Score types below) |
-| `criteria_1_...` through `criteria_10_...` | Each team's average score (mean across the 6-judge panel) for that criterion, on the site's 0–10 scale. Column names embed the criterion label (e.g. `criteria_1_Complexity of Choreography`) |
-| `fan-vote-pct` | Live fan vote share (%) received by that team in that performance |
-| `fan-vote-count` | Raw fan vote count, where available (see Structural nulls) |
+| `criteria_1_...` through `criteria_10_...` | Each team's average score (mean across the 6-judge panel) for that criterion, on the site's 0–10 scale. Column names embed the criterion label in lowercase/underscore form (e.g. `criteria_1_complexity_of_choreography`) |
+| `fan_vote_pct` | Live fan vote share (%) received by that team in that performance |
+| `fan_vote_count` | Raw fan vote count, where available (see Structural nulls) |
 | `round1_points` | Round 1 only. Points awarded 0–7 (see Score types below). Blank on Final rows. |
 | `round2_final_score` | Final only. Official fan-vote-adjusted placement score used to rank 1st/2nd/3rd. Blank on Round 1 rows. |
 
@@ -36,7 +36,7 @@ Use `total_score`/`criteria_*` for judge-only analysis; use `round1_points`/`rou
 ## Structural nulls (expected, not missing data)
 - **`round1_points`** is blank for all `Final` rows — this field only applies to Round 1 head-to-head matches.
 - **`round2_final_score`** is blank for all `Round 1` rows — this field only applies to Final-round placements.
-- **`fan-vote-count`** is blank for 4 rows: **Seoul Round 1**, both matches (Brotherhood vs Quick Style, Jam Republic vs 1Million). The source page displayed only fan-vote *percentages* for these two matches, not raw vote counts. This is a genuine gap in the source data, not a transcription omission.
+- **`fan_vote_count`** is blank for 4 rows: **Seoul Round 1**, both matches (Brotherhood vs Quick Style, Jam Republic vs 1Million). The source page displayed only fan-vote *percentages* for these two matches, not raw vote counts. This is a genuine gap in the source data, not a transcription omission.
 
 ---
 
@@ -46,6 +46,7 @@ Use `total_score`/`criteria_*` for judge-only analysis; use `round1_points`/`rou
 ---
 
 ## Naming conventions
+- **Column headers** are standardized to lowercase, underscore-separated (`snake_case`) — no spaces, hyphens, or slashes. E.g. `fan_vote_pct`, `criteria_9_projection_communication`. The one exception is `+` in criterion 7's original name ("Technical Execution + Authenticity"), rendered as `criteria_7_technical_execution_and_authenticity`.
 - **Team names** used exactly as branded on-site: `Brotherhood`, `GRV`, `1Million`, `Royal Family`, `Jam Republic`, `Quick Style`. (Home markets, for reference: Brotherhood – Vancouver, CAN; GRV – Los Angeles, USA; 1Million – Seoul, KOR; Royal Family – Auckland, NZL; Jam Republic – South East Asia, SEA; Quick Style – Oslo, NOR.)
 - **Series names** = host city only (`New York`, `Vancouver`, `Sydney`, `Seoul`), matching the site's results URLs (`idl.pro/results/<series>`).
 - **Criteria names** are copied verbatim from the site's "SCORESHEET SPREAD" panel and embedded in each criteria column header for self-description.
