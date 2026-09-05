@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Dance League — Team Scoresheet Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --bg: #f6f6f3;
+    --panel: #ffffff;
+    --panel-2: #f0f0ec;
+    --border: #e0e0da;
+    --text: #16181f;
+    --text-muted: #5b5f6a;
+    --text-faint: #8b8f99;
+    --accent: #4a54d9;
+
+    --c-bh: #dc2626;   /* Brotherhood — red */
+    --c-grv: #15803d;  /* GRV — green */
+    --c-1m: #6b7280;   /* 1Million — grey */
+    --c-qs: #0284c7;   /* Quick Style — light blue */
+    --c-jr: #ea580c;   /* Jam Republic — orange */
+    --c-rf: #ca8a04;   /* Royal Family — gold */
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 50% 0%, #ffffff 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height:1.5;
+  }
+  .wrap{ max-width: 1140px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  h1,h2,h3, .heading-font { font-family: 'Rajdhani', 'Inter', sans-serif; }
+
+  /* ---------- HEADER ---------- */
+  header{ text-align:center; margin-bottom: 6px; }
+  .title{
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0 0 10px;
+    background: linear-gradient(90deg, #16181f, #4a54d9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .subtitle{
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0 0 28px;
+  }
+  .date-row{
+    text-align:left;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-bottom: 28px;
+  }
+
+  /* ---------- DISCLAIMER ---------- */
+  .disclaimer{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 56px;
+  }
+  .disclaimer strong{ color: var(--text); }
+
+  section{ margin-bottom: 64px; }
+  .section-title{
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin: 0 0 6px;
+  }
+  .section-sub{
+    text-align:center;
+    color: var(--text-faint);
+    font-size: 0.88rem;
+    margin: 0 0 32px;
+  }
+
+  /* ---------- MASTER GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 620px){ .grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 20px 14px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background: var(--card-color, var(--accent));
+  }
+  .card-header{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 6px;
+  }
+  .card-header .team-name{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size: 1.05rem;
+    color: var(--card-color, var(--text));
+  }
+  .card-header .team-avg{
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .card canvas{ width:100% !important; height:360px !important; }
+
+  /* ---------- INDIVIDUAL VIZ ---------- */
+  .controls{
+    display:flex; flex-direction:column; align-items:center; gap:16px;
+    margin-bottom: 28px;
+  }
+  .control-row{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .control-label{
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+    text-align:center;
+  }
+  .chip{
+    font-family:'Inter',sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 15px;
+    border-radius: 999px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all .15s ease;
+  }
+  .chip:hover{ border-color: var(--text-faint); }
+  .chip.active{ color: var(--bg); }
+
+  .round-toggle{ display:flex; background: var(--panel); border:1px solid var(--border); border-radius: 999px; padding:3px; }
+  .round-toggle .chip{ border:none; border-radius: 999px; }
+  .round-toggle .chip.active{ background: var(--accent); color:#fff; }
+
+  .individual-chart-wrap{
+    max-width: 620px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 24px 16px;
+  }
+  .individual-chart-wrap canvas{ width:100% !important; height:460px !important; }
+  .empty-note{ text-align:center; color: var(--text-faint); font-size:0.85rem; padding: 40px 0; display:none; }
+
+  /* ---------- AI STATEMENT ---------- */
+  .ai-statement{
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .ai-statement h3{
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .ai-statement p{ margin: 0 0 12px; }
+  .ai-statement .sig{
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    color: var(--text-faint);
+    font-size: 0.85rem;
+  }
+  .ai-statement .sig b{ color: var(--text); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1 class="title">International Dance League<br>Team Scoresheet Analysis</h1>
+    <p class="subtitle">By Samuel Walker</p>
+  </header>
+  <div class="date-row">Last Updated: 5 Sep 2026</div>
+
+  <div class="disclaimer">
+    <strong>DISCLAIMER:</strong> This document is meant for personal interest only. Its purpose is not to demonstrate one team's superiority over another, but to provide an engaging way of viewing how teams' performances are mapped to IDL's scoring criteria by the current judges.
+  </div>
+
+  <!-- ============ MASTER GRID ============ -->
+  <section>
+    <h2 class="section-title">Season Overview</h2>
+    <p class="section-sub">Average score per criterion across all completed performances (Round 1 + Final), New York → Seoul</p>
+    <div class="grid" id="masterGrid"></div>
+  </section>
+
+  <!-- ============ INDIVIDUAL VIZ ============ -->
+  <section>
+    <h2 class="section-title">Team Deep Dive</h2>
+    <p class="section-sub">Toggle teams on/off, and filter by series or round to compare performance profiles</p>
+
+    <div class="controls">
+      <div>
+        <div class="control-label">Teams</div>
+        <div class="control-row" id="teamChips"></div>
+      </div>
+      <div>
+        <div class="control-label">Series (multi-select)</div>
+        <div class="control-row" id="seriesChips"></div>
+      </div>
+      <div>
+        <div class="control-label">Round</div>
+        <div class="control-row round-toggle" id="roundToggle"></div>
+      </div>
+    </div>
+
+    <div class="individual-chart-wrap">
+      <canvas id="individualChart" role="img" aria-label="Radar chart of selected IDL teams across 10 judging criteria, filterable by series and round"></canvas>
+      <p class="empty-note" id="emptyNote">No performances match the current filters — try widening your series or round selection.</p>
+    </div>
+  </section>
+
+  <!-- ============ AI DILIGENCE STATEMENT ============ -->
+  <section style="margin-bottom:0;">
+    <div class="ai-statement">
+      <h3>AI Diligence Statement</h3>
+      <p>This dashboard was built in collaboration with Claude (Anthropic), which assisted with retrieving and structuring the underlying scoresheet data from idl.pro, performing the calculations shown, and generating the visualizations and code for this page.</p>
+      <p>I, Samuel Walker, have reviewed the data, calculations, and visualizations presented here for accuracy and reasonableness, and I take full responsibility for the content and conclusions of this document.</p>
+      <div class="sig">Prepared with AI assistance · Reviewed and approved by <b>Samuel Walker</b></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const DATA = {"labels": ["Complexity Of Choreography", "Staging", "Musicality", "Creativity", "Stylistic Athleticism", "Cleanliness", "Technical Execution And Authenticity", "Spacing", "Projection Communication", "Stamina"], "rows": [{"team": "GRV", "series": "New York", "round": "Round 1", "scores": [8.67, 8.33, 8.5, 8.17, 7.5, 9.17, 8.5, 9.0, 9.0, 9.67]}, {"team": "Quick Style", "series": "New York", "round": "Round 1", "scores": [8.83, 8.5, 8.67, 8.5, 8.5, 8.33, 8.83, 8.67, 9.17, 9.5]}, {"team": "Brotherhood", "series": "New York", "round": "Round 1", "scores": [9.66, 8.5, 8.83, 8.5, 8.5, 9.5, 9.33, 9.0, 9.33, 9.67]}, {"team": "1Million", "series": "New York", "round": "Round 1", "scores": [8.67, 8.83, 8.5, 8.33, 8.67, 8.33, 8.83, 8.67, 9.0, 9.5]}, {"team": "Royal Family", "series": "New York", "round": "Round 1", "scores": [8.5, 9.0, 8.5, 7.83, 8.67, 8.33, 8.67, 8.67, 9.0, 9.5]}, {"team": "Jam Republic", "series": "New York", "round": "Round 1", "scores": [8.0, 8.33, 8.5, 8.0, 8.5, 7.83, 7.83, 8.0, 8.17, 9.33]}, {"team": "Brotherhood", "series": "New York", "round": "Final", "scores": [10.0, 9.83, 10.0, 10.0, 10.0, 10.0, 9.5, 9.17, 10.0, 10.0]}, {"team": "Quick Style", "series": "New York", "round": "Final", "scores": [9.33, 9.0, 9.17, 9.0, 8.5, 8.5, 9.0, 8.67, 9.33, 9.33]}, {"team": "Royal Family", "series": "New York", "round": "Final", "scores": [8.67, 8.83, 8.33, 8.17, 8.5, 8.5, 8.17, 8.83, 8.83, 9.33]}, {"team": "Royal Family", "series": "Vancouver", "round": "Round 1", "scores": [8.0, 8.33, 8.5, 8.17, 7.5, 9.17, 8.5, 9.0, 9.0, 9.67]}, {"team": "1Million", "series": "Vancouver", "round": "Round 1", "scores": [8.33, 8.5, 8.67, 8.5, 8.5, 8.33, 8.83, 8.67, 9.17, 9.5]}, {"team": "Quick Style", "series": "Vancouver", "round": "Round 1", "scores": [8.33, 7.67, 8.67, 8.17, 7.83, 8.5, 8.33, 8.5, 8.67, 9.33]}, {"team": "Jam Republic", "series": "Vancouver", "round": "Round 1", "scores": [8.67, 8.33, 8.67, 8.5, 8.67, 9.0, 8.67, 8.67, 9.5, 9.67]}, {"team": "GRV", "series": "Vancouver", "round": "Round 1", "scores": [8.5, 9.0, 8.5, 9.67, 9.0, 8.67, 8.83, 8.67, 9.5, 9.83]}, {"team": "Brotherhood", "series": "Vancouver", "round": "Round 1", "scores": [8.83, 8.67, 9.33, 9.33, 9.0, 9.67, 9.5, 8.83, 10.0, 10.0]}, {"team": "Brotherhood", "series": "Vancouver", "round": "Final", "scores": [9.33, 9.83, 9.5, 9.5, 9.0, 9.5, 9.33, 8.5, 9.67, 9.83]}, {"team": "Jam Republic", "series": "Vancouver", "round": "Final", "scores": [7.67, 8.33, 9.17, 8.5, 7.83, 8.83, 8.67, 8.5, 9.17, 9.5]}, {"team": "1Million", "series": "Vancouver", "round": "Final", "scores": [8.0, 8.5, 8.5, 8.33, 8.0, 8.5, 8.67, 8.5, 9.0, 9.5]}, {"team": "Jam Republic", "series": "Sydney", "round": "Round 1", "scores": [7.17, 8.0, 8.33, 8.0, 7.83, 8.0, 7.67, 8.33, 8.5, 9.17]}, {"team": "GRV", "series": "Sydney", "round": "Round 1", "scores": [9.0, 8.67, 8.5, 8.5, 8.83, 8.67, 8.83, 8.5, 9.33, 10.0]}, {"team": "Quick Style", "series": "Sydney", "round": "Round 1", "scores": [8.0, 8.33, 8.33, 8.16, 8.17, 7.0, 8.17, 8.17, 8.67, 9.0]}, {"team": "1Million", "series": "Sydney", "round": "Round 1", "scores": [7.66, 8.67, 8.17, 9.0, 8.5, 8.0, 8.33, 8.5, 9.67, 9.5]}, {"team": "Brotherhood", "series": "Sydney", "round": "Round 1", "scores": [8.83, 9.17, 9.5, 9.67, 9.17, 9.0, 8.83, 8.5, 9.83, 9.67]}, {"team": "Royal Family", "series": "Sydney", "round": "Round 1", "scores": [8.33, 8.67, 8.83, 8.67, 8.83, 8.5, 8.17, 8.67, 9.67, 9.83]}, {"team": "Brotherhood", "series": "Sydney", "round": "Final", "scores": [9.0, 9.16, 9.17, 9.0, 9.17, 9.17, 9.0, 9.0, 9.83, 10.0]}, {"team": "GRV", "series": "Sydney", "round": "Final", "scores": [9.33, 8.83, 9.33, 8.68, 9.17, 8.83, 8.83, 8.5, 9.33, 9.83]}, {"team": "1Million", "series": "Sydney", "round": "Final", "scores": [8.33, 8.83, 8.68, 8.83, 8.83, 8.17, 9.0, 8.83, 9.67, 10.0]}, {"team": "GRV", "series": "Seoul", "round": "Round 1", "scores": [8.5, 8.17, 8.75, 7.83, 8.33, 8.5, 8.08, 8.5, 8.67, 8.75]}, {"team": "Royal Family", "series": "Seoul", "round": "Round 1", "scores": [8.67, 8.67, 8.75, 8.5, 8.75, 8.83, 8.58, 8.5, 9.08, 9.5]}, {"team": "Brotherhood", "series": "Seoul", "round": "Round 1", "scores": [8.83, 8.83, 8.75, 8.42, 8.58, 8.92, 8.33, 8.58, 9.25, 9.33]}, {"team": "Quick Style", "series": "Seoul", "round": "Round 1", "scores": [8.5, 8.42, 8.75, 8.5, 7.83, 7.83, 8.5, 8.25, 9.17, 9.08]}, {"team": "Jam Republic", "series": "Seoul", "round": "Round 1", "scores": [8.83, 8.5, 8.83, 8.08, 8.17, 8.58, 8.5, 8.33, 8.67, 9.08]}, {"team": "1Million", "series": "Seoul", "round": "Round 1", "scores": [8.5, 9.08, 8.5, 8.75, 8.5, 8.75, 8.75, 8.83, 9.17, 9.42]}, {"team": "Brotherhood", "series": "Seoul", "round": "Final", "scores": [9.25, 9.17, 9.25, 9.08, 8.67, 9.33, 8.92, 9.08, 9.25, 9.58]}, {"team": "1Million", "series": "Seoul", "round": "Final", "scores": [8.58, 9.33, 8.66, 9.0, 8.92, 8.67, 8.83, 8.92, 9.25, 9.42]}, {"team": "Royal Family", "series": "Seoul", "round": "Final", "scores": [8.5, 9.0, 8.58, 8.66, 8.33, 8.92, 8.67, 8.92, 9.0, 9.25]}]};
+
+const TEAM_COLORS = {
+  "Brotherhood": "var(--c-bh)",
+  "GRV": "var(--c-grv)",
+  "1Million": "var(--c-1m)",
+  "Quick Style": "var(--c-qs)",
+  "Jam Republic": "var(--c-jr)",
+  "Royal Family": "var(--c-rf)"
+};
+// resolved hex (canvas can't read CSS vars directly in JS contexts reliably for canvas fill, so hardcode)
+const TEAM_HEX = {
+  "Brotherhood": "#dc2626",
+  "GRV": "#15803d",
+  "1Million": "#6b7280",
+  "Quick Style": "#0284c7",
+  "Jam Republic": "#ea580c",
+  "Royal Family": "#ca8a04"
+};
+
+const TEAMS = Object.keys(TEAM_HEX);
+const SERIES = ["New York", "Vancouver", "Sydney", "Seoul"];
+const LABELS = DATA.labels;
+
+function average(rows) {
+  const n = rows.length;
+  const sums = new Array(LABELS.length).fill(0);
+  rows.forEach(r => r.scores.forEach((s,i) => sums[i]+=s));
+  return sums.map(s => n ? +(s/n).toFixed(2) : 0);
+}
+
+function hexAlpha(hex, alpha) {
+  return hex + alpha;
+}
+
+/* ---------------- MASTER GRID ---------------- */
+const masterGrid = document.getElementById('masterGrid');
+TEAMS.forEach(team => {
+  const rows = DATA.rows.filter(r => r.team === team);
+  const avg = average(rows);
+  const overall = +(avg.reduce((a,b)=>a+b,0)).toFixed(2);
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.setProperty('--card-color', TEAM_HEX[team]);
+  card.innerHTML = `
+    <div class="card-header">
+      <span class="team-name">${team}</span>
+      <span class="team-avg">Σ ${overall}</span>
+    </div>
+    <canvas></canvas>
+  `;
+  masterGrid.appendChild(card);
+
+  new Chart(card.querySelector('canvas'), {
+    type: 'radar',
+    data: {
+      labels: LABELS,
+      datasets: [{
+        data: avg,
+        borderColor: TEAM_HEX[team],
+        backgroundColor: hexAlpha(TEAM_HEX[team], '33'),
+        borderWidth: 2,
+        pointRadius: 2,
+        pointBackgroundColor: TEAM_HEX[team]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display:false }, tooltip: { enabled:true } },
+      scales: {
+        r: {
+          min: 7.5, max: 10,
+          ticks: { display:false },
+          grid: { color: '#e0e0da' },
+          angleLines: { color: '#e0e0da' },
+          pointLabels: {
+            display: true,
+            color: '#5b5f6a',
+            font: { size: 10.5, family: 'Inter' },
+            padding: 6
+          }
+        }
+      }
+    }
+  });
+});
+
+/* ---------------- INDIVIDUAL VIZ ---------------- */
+let activeTeams = new Set(["1Million", "Royal Family"]);
+let activeSeries = new Set(SERIES);
+let activeRound = "All";
+
+const teamChipsEl = document.getElementById('teamChips');
+const seriesChipsEl = document.getElementById('seriesChips');
+const roundToggleEl = document.getElementById('roundToggle');
+
+TEAMS.forEach(team => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.textContent = team;
+  const c = TEAM_HEX[team];
+  const paint = () => {
+    const on = activeTeams.has(team);
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? (c + '1f') : 'transparent';
+    chip.style.borderColor = on ? c : 'var(--border)';
+    chip.style.color = on ? c : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    activeTeams.has(team) ? activeTeams.delete(team) : activeTeams.add(team);
+    paint(); renderIndividual();
+  });
+  paint();
+  teamChipsEl.appendChild(chip);
+});
+
+SERIES.forEach(s => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.textContent = s;
+  const paint = () => {
+    const on = activeSeries.has(s);
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? 'var(--accent)' : 'transparent';
+    chip.style.borderColor = on ? 'var(--accent)' : 'var(--border)';
+    chip.style.color = on ? '#fff' : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    activeSeries.has(s) ? activeSeries.delete(s) : activeSeries.add(s);
+    paint(); renderIndividual();
+  });
+  paint();
+  seriesChipsEl.appendChild(chip);
+});
+
+["All", "Round 1", "Final"].forEach(r => {
+  const chip = document.createElement('button');
+  chip.className = 'chip' + (r === activeRound ? ' active' : '');
+  chip.textContent = r;
+  chip.addEventListener('click', () => {
+    activeRound = r;
+    [...roundToggleEl.children].forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    renderIndividual();
+  });
+  roundToggleEl.appendChild(chip);
+});
+
+const indCtx = document.getElementById('individualChart');
+const emptyNote = document.getElementById('emptyNote');
+let individualChart = new Chart(indCtx, {
+  type: 'radar',
+  data: { labels: LABELS, datasets: [] },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position:'bottom', labels: { color: '#5b5f6a', font:{family:'Inter', size:12}, usePointStyle:true, boxWidth:8 } }
+    },
+    scales: {
+      r: {
+        min: 7, max: 10,
+        ticks: { stepSize:0.5, color:'#8b8f99', font:{size:10}, backdropColor:'transparent' },
+        grid: { color:'#e0e0da' },
+        angleLines: { color:'#e0e0da' },
+        pointLabels: { color:'#5b5f6a', font:{size:11} }
+      }
+    }
+  }
+});
+
+function renderIndividual() {
+  const filtered = DATA.rows.filter(r =>
+    activeSeries.has(r.series) &&
+    (activeRound === "All" || r.round === activeRound)
+  );
+
+  const datasets = TEAMS.filter(t => activeTeams.has(t)).map(team => {
+    const rows = filtered.filter(r => r.team === team);
+    const avg = average(rows);
+    return {
+      label: team + (rows.length ? '' : ' (no data)'),
+      data: avg,
+      borderColor: TEAM_HEX[team],
+      backgroundColor: hexAlpha(TEAM_HEX[team], '26'),
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: TEAM_HEX[team],
+      hidden: rows.length === 0
+    };
+  });
+
+  individualChart.data.datasets = datasets;
+  individualChart.update();
+
+  const anyData = datasets.some(d => !d.hidden);
+  emptyNote.style.display = (datasets.length === 0 || !anyData) ? 'block' : 'none';
+  indCtx.style.display = (datasets.length === 0 || !anyData) ? 'none' : 'block';
+}
+renderIndividual();
+</script>
+</body>
+</html>

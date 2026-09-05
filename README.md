@@ -62,3 +62,60 @@ Use `total_score`/`criteria_*` for judge-only analysis; use `round1_points`/`rou
 ## Known limitations
 - Reflects only the 4 completed series as of collection date. Los Angeles and the Championship series are excluded (not yet run).
 - Per-judge (individual judge, not just team average) scores were not captured in this dataset — only the panel-average per criterion. If judge-level granularity is needed later, it is available on the source pages but would require additional extraction.
+
+---
+
+# AI prompts and context:
+
+TEAM ABREVIATIONS:
+BH: Brotherhood
+GRV: GRV
+1M: 1Million
+Quick: Quick Style
+JR: Jam Republic
+RF: Royal Family
+
+
+TEAM CHARACTERISTIC COLORS:
+BH: red
+GRV: green
+1M: grey
+Quick: light blue
+JR: orange
+RF: gold
+
+
+## Dashboard Prompt
+Initial prompt:
+
+AIM: Create a custom html artifact that serves as a dashboard for teams competing in the IDL.
+
+The convention I am using to design the document is naming each section (followed by styling constraints in brackets): the actual text that I want to be displayed. I may use markdown syntax to specify other formatting options within the text. text is square brackets [] should be filled out yourself.
+
+Here is the structure starting from the top down:
+
+TITLE (middle indent): International Dance League Team Scoresheet Analysis
+
+SUBTITLE (grey font, middle indent): By Samuel Walker
+
+DATE (left indent, use format dd mmm yyyy e.g. 5 Aug 2026): Last Updated: [todays date]
+
+DISCLAIMER: **DISCLAIMER:** This document is meant for personal interest only. It’s purpose is not to demonstrate another team’s superiority over another but to provide an engaging way of viewing how teams performances are mapped to IDLs scoring criteria by the current judges.
+
+MASTER GRID: [3 by 2 grid of each team’s radar chart, color coded, showing avg scores across the entire series so far]
+
+INDIVIDUAL VIZ (large, center indent): [color coded radar chart showing average performance for each team with team filter toggles, just like the one you created for me previously with added filters that allows you to segment by series and round]
+
+AI DILIGENCE STATEMENT: [acknowledge your own part in this project, the goal is for me to acknowledge AI's involvement and to state that I have reviewed the AI output and that I take responsibility for this work.]
+
+Please ask me questions until you have a perfect understanding of what I am trying to design.
+
+Iteration 1 prompt:  
+
+This looks fantastic. I would like to fine tune and add some things.
+
+INDIVIDUAL VIZ - modify the default display so that it compares 1M and RF instead of BH and JR, since this closer comparison is more in-keeping with the disclaimer. 
+
+MASTER GRID - I can see that the criteria is not displayed on the radar chart but shows up when I mouse over. However this is proving to be unreliable.Lets change to a 2 wide 3 high grid so that we can enlarge each chart and inlcude the criteria names on the radar chart nodes, I understand that the viewer will have to scroll to see the full grid on a laptop.
+
+I would also like to try the light theme.
