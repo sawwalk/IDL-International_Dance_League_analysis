@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
   :root{
     --bg: #f6f6f3;
@@ -94,6 +95,20 @@
     font-size: 0.88rem;
     margin: 0 0 32px;
   }
+  .subsection-title{
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 44px 0 4px;
+    text-align: center;
+  }
+  .subsection-sub{
+    text-align:center;
+    color: var(--text-faint);
+    font-size: 0.82rem;
+    margin: 0 0 22px;
+    max-width: 620px;
+    margin-left:auto; margin-right:auto;
+  }
 
   /* ---------- MASTER GRID ---------- */
   .grid{
@@ -134,7 +149,123 @@
   }
   .card canvas{ width:100% !important; height:360px !important; }
 
-  /* ---------- INDIVIDUAL VIZ ---------- */
+  /* ---------- FAN VOTE TABLE ---------- */
+  .table-wrap{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px 6px 16px;
+    overflow-x:auto;
+  }
+  table.fanvote{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+  table.fanvote th{
+    text-align:left;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:0.78rem;
+    letter-spacing:0.3px;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border);
+    white-space:nowrap;
+  }
+  table.fanvote td{
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    white-space: nowrap;
+  }
+  table.fanvote tr.disagree td{
+    background: rgba(220,38,38,0.08);
+  }
+  table.fanvote tr.disagree td:first-child{
+    box-shadow: inset 3px 0 0 var(--c-bh);
+  }
+  table.fanvote tr.close-vote td{
+    background: rgba(202,138,4,0.12);
+  }
+  table.fanvote tr.close-vote td:first-child{
+    box-shadow: inset 3px 0 0 var(--c-rf);
+  }
+  table.fanvote tr:last-child td{ border-bottom:none; }
+  .table-footer{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 14px 2px;
+    flex-wrap:wrap; gap:10px;
+  }
+  .expand-btn{
+    font-family:'Inter',sans-serif;
+    font-size:0.8rem; font-weight:600;
+    padding:7px 16px; border-radius:999px;
+    background:transparent; border:1px solid var(--border);
+    color:var(--accent); cursor:pointer;
+  }
+  .expand-btn:hover{ border-color: var(--accent); }
+  .table-note{ color:var(--text-faint); font-size:0.76rem; margin:0; }
+  .legend-note{ color:var(--text-faint); font-size:0.78rem; text-align:center; margin: 12px 0 0; }
+  .legend-swatch{ display:inline-block; width:10px; height:10px; border-radius:2px; background:rgba(220,38,38,0.35); box-shadow: inset 2px 0 0 var(--c-bh); margin-right:6px; vertical-align:middle; }
+  .legend-swatch.close{ background: rgba(202,138,4,0.35); box-shadow: inset 2px 0 0 var(--c-rf); }
+
+  /* ---------- CHART PANELS ---------- */
+  .chart-panel{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 20px 12px;
+    margin-bottom: 22px;
+  }
+  .chart-panel canvas{ width:100% !important; height:320px !important; }
+
+  /* ---------- SPARKLINE GRID ---------- */
+  .sparkline-grid{
+    display:grid;
+    gap:16px;
+  }
+  .sparkline-grid-3{ grid-template-columns: repeat(3, 1fr); margin-bottom:16px; }
+  .sparkline-single-row{ display:flex; justify-content:center; }
+  .sparkline-single-row .spark-card{ width: calc((100% - 32px) / 3); }
+  @media (max-width: 720px){
+    .sparkline-grid-3{ grid-template-columns: repeat(2, 1fr); }
+    .sparkline-single-row .spark-card{ width: calc((100% - 16px) / 2); }
+  }
+  @media (max-width: 460px){
+    .sparkline-grid-3{ grid-template-columns: 1fr; }
+    .sparkline-single-row .spark-card{ width: 100%; }
+  }
+  .spark-card{
+    background: var(--panel);
+    border:1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px 8px;
+  }
+  .spark-card-header{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:8px;
+    margin-bottom:2px;
+  }
+  .spark-title{
+    font-size:0.76rem;
+    font-weight:600;
+    color: var(--text-muted);
+    line-height:1.25;
+  }
+  .spark-delta{
+    font-size:0.76rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+  }
+  .spark-delta.up{ color:#15803d; }
+  .spark-delta.down{ color:#dc2626; }
+  .spark-delta.flat{ color: var(--text-faint); }
+  .spark-card canvas{ width:100% !important; height:92px !important; }
+
+  /* ---------- CONTROLS (shared) ---------- */
   .controls{
     display:flex; flex-direction:column; align-items:center; gap:16px;
     margin-bottom: 28px;
@@ -178,6 +309,45 @@
   .individual-chart-wrap canvas{ width:100% !important; height:460px !important; }
   .empty-note{ text-align:center; color: var(--text-faint); font-size:0.85rem; padding: 40px 0; display:none; }
 
+  /* ---------- EXPLORER ---------- */
+  .explorer-controls{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 620px;
+    margin: 0 auto 24px;
+  }
+  @media (max-width:560px){ .explorer-controls{ grid-template-columns:1fr; } }
+  .explorer-slot{
+    background: var(--panel);
+    border:1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .explorer-slot-label{
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:1px;
+    color: var(--text-faint); margin-bottom:10px; font-weight:700;
+  }
+  .explorer-slot select{
+    width:100%;
+    font-family:'Inter',sans-serif;
+    font-size:0.85rem;
+    padding: 8px 10px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+    margin-bottom:8px;
+  }
+  table.explorer-compare{
+    width:100%; max-width:620px; margin: 18px auto 0;
+    border-collapse:collapse; font-size:0.85rem;
+  }
+  table.explorer-compare th, table.explorer-compare td{
+    padding:9px 12px; border-bottom:1px solid var(--border); text-align:left;
+  }
+  table.explorer-compare th{ font-family:'Rajdhani',sans-serif; font-weight:700; color:var(--text-muted); font-size:0.78rem; }
+
   /* ---------- AI STATEMENT ---------- */
   .ai-statement{
     background: var(--panel-2);
@@ -210,23 +380,59 @@
     <h1 class="title">International Dance League<br>Team Scoresheet Analysis</h1>
     <p class="subtitle">By Samuel Walker</p>
   </header>
-  <div class="date-row">Last Updated: 5 Sep 2026</div>
+  <div class="date-row">Last Updated: 22 Sep 2026</div>
 
   <div class="disclaimer">
-    <strong>DISCLAIMER:</strong> This document is meant for personal interest only. Its purpose is not to demonstrate one team's superiority over another, but to provide an engaging way of viewing how teams' performances are mapped to IDL's scoring criteria by the current judges.
+    <strong>DISCLAIMER:</strong> I do not think dance is quantifiable. This is an exploration of the system IDL has used to attempt the impossible task of objectively assessing performances. It is for personal interest only and NOT for demonstrating one team's superiority over another.
   </div>
 
-  <!-- ============ MASTER GRID ============ -->
+  <!-- ============ SEASON OVERVIEW ============ -->
   <section>
     <h2 class="section-title">Season Overview</h2>
-    <p class="section-sub">Average score per criterion across all completed performances (Round 1 + Final), New York → Seoul</p>
+    <p class="section-sub">Average score per criterion across all completed performances (Round 1 + Round 2) — New York → Championship</p>
     <div class="grid" id="masterGrid"></div>
+
+    <h3 class="subsection-title">Fan Vote vs Judges' Scores</h3>
+    <p class="subsection-sub">Every matchup with fan vote data shown on the site, flagged where the fan favorite didn't have the higher score</p>
+    <div class="table-wrap">
+      <table class="fanvote" id="fanVoteTable">
+        <thead>
+          <tr><th>Series</th><th>Round</th><th>Matchup</th><th>Fan Votes %</th><th>Score</th></tr>
+        </thead>
+        <tbody id="fanVoteBody"></tbody>
+      </table>
+      <div class="table-footer">
+        <p class="table-note" id="fanVoteNote"></p>
+        <button class="expand-btn" id="fanVoteExpand">Show all</button>
+      </div>
+    </div>
+    <p class="legend-note"><span class="legend-swatch"></span>Fan vote leader did not have the higher score</p>
+    <p class="legend-note" style="margin-top:4px;"><span class="legend-swatch close"></span>Any two teams both landed between 40% and 60% of the fan vote (red takes priority when both apply)</p>
+
+    <h3 class="subsection-title">Round 1 and Round 2 Score Progression</h3>
+    <p class="subsection-sub">Solid line, star markers = Round 1 judged score. Dashed line, open circle markers = Final round judged score — no fan-vote bonus applied. Note teams do not always reach round 2.</p>
+    <div class="control-row" id="lineTeamChips" style="margin-bottom:12px;"></div>
+    <div class="control-row" id="lineVisibilityToggles" style="margin-bottom:14px;"></div>
+    <div class="chart-panel"><canvas id="progressionLine"></canvas></div>
+
+    <h3 class="subsection-title">Hardest Criteria to Score Well In</h3>
+    <p class="subsection-sub">League-wide average per criterion across all 54 performances, lowest (hardest) first — hover a bar for its full range</p>
+    <div class="chart-panel"><canvas id="criteriaBar" style="height:380px !important;"></canvas></div>
   </section>
 
-  <!-- ============ INDIVIDUAL VIZ ============ -->
+  <!-- ============ TEAM EVOLUTION ============ -->
+  <section>
+    <h2 class="section-title">Team Evolution</h2>
+    <p class="section-sub">Per-criterion trend across series for one team at a time — each point averages Round 1 and Round 2 when a team reached both that series</p>
+    <div class="control-row" id="evoTeamChips" style="margin-bottom:22px;"></div>
+    <div class="sparkline-grid sparkline-grid-3" id="sparklineGridTop"></div>
+    <div class="sparkline-grid sparkline-single-row" id="sparklineGridBottom"></div>
+  </section>
+
+  <!-- ============ TEAM DEEP DIVE ============ -->
   <section>
     <h2 class="section-title">Team Deep Dive</h2>
-    <p class="section-sub">Toggle teams on/off, and filter by series or round to compare performance profiles</p>
+    <p class="section-sub">Toggle teams on/off, and filter by series or round to compare aggregate performance profiles</p>
 
     <div class="controls">
       <div>
@@ -249,11 +455,37 @@
     </div>
   </section>
 
+  <!-- ============ PERFORMANCE EXPLORER ============ -->
+  <section>
+    <h2 class="section-title">Performance Explorer</h2>
+    <p class="section-sub">Compare two exact performances head-to-head — actual scoresheets, not averages</p>
+
+    <div class="explorer-controls">
+      <div class="explorer-slot">
+        <div class="explorer-slot-label">Performance A</div>
+        <select id="explorerTeamA"></select>
+        <select id="explorerSeriesA"></select>
+        <select id="explorerRoundA"></select>
+      </div>
+      <div class="explorer-slot">
+        <div class="explorer-slot-label">Performance B</div>
+        <select id="explorerTeamB"></select>
+        <select id="explorerSeriesB"></select>
+        <select id="explorerRoundB"></select>
+      </div>
+    </div>
+
+    <div class="individual-chart-wrap">
+      <canvas id="explorerChart" role="img" aria-label="Radar chart comparing two selected individual performances"></canvas>
+    </div>
+    <table class="explorer-compare" id="explorerCompareTable"></table>
+  </section>
+
   <!-- ============ AI DILIGENCE STATEMENT ============ -->
   <section style="margin-bottom:0;">
     <div class="ai-statement">
       <h3>AI Diligence Statement</h3>
-      <p>This dashboard was built in collaboration with Claude (Anthropic), which assisted with retrieving and structuring the underlying scoresheet data from idl.pro, performing the calculations shown, and generating the visualizations and code for this page.</p>
+      <p>This dashboard was built in collaboration with Claude (Anthropic), which assisted with retrieving and structuring the underlying scoresheet data from idl.pro, performing the calculations shown, and generating the visualizations and code for this page. The original build covered the Season Overview and Team Deep Dive views for four series; a later pass added the Los Angeles and Championship series along with the Fan Vote, Round Progression, Team Evolution, and Performance Explorer views.</p>
       <p>I, Samuel Walker, have reviewed the data, calculations, and visualizations presented here for accuracy and reasonableness, and I take full responsibility for the content and conclusions of this document.</p>
       <div class="sig">Prepared with AI assistance · Reviewed and approved by <b>Samuel Walker</b></div>
     </div>
@@ -262,17 +494,8 @@
 </div>
 
 <script>
-const DATA = {"labels": ["Complexity Of Choreography", "Staging", "Musicality", "Creativity", "Stylistic Athleticism", "Cleanliness", "Technical Execution And Authenticity", "Spacing", "Projection Communication", "Stamina"], "rows": [{"team": "GRV", "series": "New York", "round": "Round 1", "scores": [8.67, 8.33, 8.5, 8.17, 7.5, 9.17, 8.5, 9.0, 9.0, 9.67]}, {"team": "Quick Style", "series": "New York", "round": "Round 1", "scores": [8.83, 8.5, 8.67, 8.5, 8.5, 8.33, 8.83, 8.67, 9.17, 9.5]}, {"team": "Brotherhood", "series": "New York", "round": "Round 1", "scores": [9.66, 8.5, 8.83, 8.5, 8.5, 9.5, 9.33, 9.0, 9.33, 9.67]}, {"team": "1Million", "series": "New York", "round": "Round 1", "scores": [8.67, 8.83, 8.5, 8.33, 8.67, 8.33, 8.83, 8.67, 9.0, 9.5]}, {"team": "Royal Family", "series": "New York", "round": "Round 1", "scores": [8.5, 9.0, 8.5, 7.83, 8.67, 8.33, 8.67, 8.67, 9.0, 9.5]}, {"team": "Jam Republic", "series": "New York", "round": "Round 1", "scores": [8.0, 8.33, 8.5, 8.0, 8.5, 7.83, 7.83, 8.0, 8.17, 9.33]}, {"team": "Brotherhood", "series": "New York", "round": "Final", "scores": [10.0, 9.83, 10.0, 10.0, 10.0, 10.0, 9.5, 9.17, 10.0, 10.0]}, {"team": "Quick Style", "series": "New York", "round": "Final", "scores": [9.33, 9.0, 9.17, 9.0, 8.5, 8.5, 9.0, 8.67, 9.33, 9.33]}, {"team": "Royal Family", "series": "New York", "round": "Final", "scores": [8.67, 8.83, 8.33, 8.17, 8.5, 8.5, 8.17, 8.83, 8.83, 9.33]}, {"team": "Royal Family", "series": "Vancouver", "round": "Round 1", "scores": [8.0, 8.33, 8.5, 8.17, 7.5, 9.17, 8.5, 9.0, 9.0, 9.67]}, {"team": "1Million", "series": "Vancouver", "round": "Round 1", "scores": [8.33, 8.5, 8.67, 8.5, 8.5, 8.33, 8.83, 8.67, 9.17, 9.5]}, {"team": "Quick Style", "series": "Vancouver", "round": "Round 1", "scores": [8.33, 7.67, 8.67, 8.17, 7.83, 8.5, 8.33, 8.5, 8.67, 9.33]}, {"team": "Jam Republic", "series": "Vancouver", "round": "Round 1", "scores": [8.67, 8.33, 8.67, 8.5, 8.67, 9.0, 8.67, 8.67, 9.5, 9.67]}, {"team": "GRV", "series": "Vancouver", "round": "Round 1", "scores": [8.5, 9.0, 8.5, 9.67, 9.0, 8.67, 8.83, 8.67, 9.5, 9.83]}, {"team": "Brotherhood", "series": "Vancouver", "round": "Round 1", "scores": [8.83, 8.67, 9.33, 9.33, 9.0, 9.67, 9.5, 8.83, 10.0, 10.0]}, {"team": "Brotherhood", "series": "Vancouver", "round": "Final", "scores": [9.33, 9.83, 9.5, 9.5, 9.0, 9.5, 9.33, 8.5, 9.67, 9.83]}, {"team": "Jam Republic", "series": "Vancouver", "round": "Final", "scores": [7.67, 8.33, 9.17, 8.5, 7.83, 8.83, 8.67, 8.5, 9.17, 9.5]}, {"team": "1Million", "series": "Vancouver", "round": "Final", "scores": [8.0, 8.5, 8.5, 8.33, 8.0, 8.5, 8.67, 8.5, 9.0, 9.5]}, {"team": "Jam Republic", "series": "Sydney", "round": "Round 1", "scores": [7.17, 8.0, 8.33, 8.0, 7.83, 8.0, 7.67, 8.33, 8.5, 9.17]}, {"team": "GRV", "series": "Sydney", "round": "Round 1", "scores": [9.0, 8.67, 8.5, 8.5, 8.83, 8.67, 8.83, 8.5, 9.33, 10.0]}, {"team": "Quick Style", "series": "Sydney", "round": "Round 1", "scores": [8.0, 8.33, 8.33, 8.16, 8.17, 7.0, 8.17, 8.17, 8.67, 9.0]}, {"team": "1Million", "series": "Sydney", "round": "Round 1", "scores": [7.66, 8.67, 8.17, 9.0, 8.5, 8.0, 8.33, 8.5, 9.67, 9.5]}, {"team": "Brotherhood", "series": "Sydney", "round": "Round 1", "scores": [8.83, 9.17, 9.5, 9.67, 9.17, 9.0, 8.83, 8.5, 9.83, 9.67]}, {"team": "Royal Family", "series": "Sydney", "round": "Round 1", "scores": [8.33, 8.67, 8.83, 8.67, 8.83, 8.5, 8.17, 8.67, 9.67, 9.83]}, {"team": "Brotherhood", "series": "Sydney", "round": "Final", "scores": [9.0, 9.16, 9.17, 9.0, 9.17, 9.17, 9.0, 9.0, 9.83, 10.0]}, {"team": "GRV", "series": "Sydney", "round": "Final", "scores": [9.33, 8.83, 9.33, 8.68, 9.17, 8.83, 8.83, 8.5, 9.33, 9.83]}, {"team": "1Million", "series": "Sydney", "round": "Final", "scores": [8.33, 8.83, 8.68, 8.83, 8.83, 8.17, 9.0, 8.83, 9.67, 10.0]}, {"team": "GRV", "series": "Seoul", "round": "Round 1", "scores": [8.5, 8.17, 8.75, 7.83, 8.33, 8.5, 8.08, 8.5, 8.67, 8.75]}, {"team": "Royal Family", "series": "Seoul", "round": "Round 1", "scores": [8.67, 8.67, 8.75, 8.5, 8.75, 8.83, 8.58, 8.5, 9.08, 9.5]}, {"team": "Brotherhood", "series": "Seoul", "round": "Round 1", "scores": [8.83, 8.83, 8.75, 8.42, 8.58, 8.92, 8.33, 8.58, 9.25, 9.33]}, {"team": "Quick Style", "series": "Seoul", "round": "Round 1", "scores": [8.5, 8.42, 8.75, 8.5, 7.83, 7.83, 8.5, 8.25, 9.17, 9.08]}, {"team": "Jam Republic", "series": "Seoul", "round": "Round 1", "scores": [8.83, 8.5, 8.83, 8.08, 8.17, 8.58, 8.5, 8.33, 8.67, 9.08]}, {"team": "1Million", "series": "Seoul", "round": "Round 1", "scores": [8.5, 9.08, 8.5, 8.75, 8.5, 8.75, 8.75, 8.83, 9.17, 9.42]}, {"team": "Brotherhood", "series": "Seoul", "round": "Final", "scores": [9.25, 9.17, 9.25, 9.08, 8.67, 9.33, 8.92, 9.08, 9.25, 9.58]}, {"team": "1Million", "series": "Seoul", "round": "Final", "scores": [8.58, 9.33, 8.66, 9.0, 8.92, 8.67, 8.83, 8.92, 9.25, 9.42]}, {"team": "Royal Family", "series": "Seoul", "round": "Final", "scores": [8.5, 9.0, 8.58, 8.66, 8.33, 8.92, 8.67, 8.92, 9.0, 9.25]}]};
+const DATA = {"labels":["Complexity Of Choreography","Staging","Musicality","Creativity","Stylistic Athleticism","Cleanliness","Technical Execution And Authenticity","Spacing","Projection Communication","Stamina"],"rows":[{"team":"GRV","series":"New York","round":"Round 1","opponent":"Quick Style","total_score":86.51,"scores":[8.67,8.33,8.5,8.17,7.5,9.17,8.5,9.0,9.0,9.67],"fan_vote_pct":41.0,"fan_vote_count":676.0,"round1_points":3.0,"round2_final_score":null},{"team":"Quick Style","series":"New York","round":"Round 1","opponent":"GRV","total_score":87.5,"scores":[8.83,8.5,8.67,8.5,8.5,8.33,8.83,8.67,9.17,9.5],"fan_vote_pct":59.0,"fan_vote_count":973.0,"round1_points":4.0,"round2_final_score":null},{"team":"Brotherhood","series":"New York","round":"Round 1","opponent":"1Million","total_score":90.82,"scores":[9.66,8.5,8.83,8.5,8.5,9.5,9.33,9.0,9.33,9.67],"fan_vote_pct":76.0,"fan_vote_count":2225.0,"round1_points":7.0,"round2_final_score":null},{"team":"1Million","series":"New York","round":"Round 1","opponent":"Brotherhood","total_score":87.33,"scores":[8.67,8.83,8.5,8.33,8.67,8.33,8.83,8.67,9.0,9.5],"fan_vote_pct":24.0,"fan_vote_count":699.0,"round1_points":0.0,"round2_final_score":null},{"team":"Royal Family","series":"New York","round":"Round 1","opponent":"Jam Republic","total_score":86.67,"scores":[8.5,9.0,8.5,7.83,8.67,8.33,8.67,8.67,9.0,9.5],"fan_vote_pct":40.0,"fan_vote_count":1200.0,"round1_points":6.0,"round2_final_score":null},{"team":"Jam Republic","series":"New York","round":"Round 1","opponent":"Royal Family","total_score":82.49,"scores":[8.0,8.33,8.5,8.0,8.5,7.83,7.83,8.0,8.17,9.33],"fan_vote_pct":60.0,"fan_vote_count":1808.0,"round1_points":1.0,"round2_final_score":null},{"team":"Brotherhood","series":"New York","round":"Round 2","opponent":"Quick Style, Royal Family","total_score":98.5,"scores":[10.0,9.83,10.0,10.0,10.0,10.0,9.5,9.17,10.0,10.0],"fan_vote_pct":78.0,"fan_vote_count":1527.0,"round1_points":null,"round2_final_score":99.28},{"team":"Quick Style","series":"New York","round":"Round 2","opponent":"Brotherhood, Royal Family","total_score":89.83,"scores":[9.33,9.0,9.17,9.0,8.5,8.5,9.0,8.67,9.33,9.33],"fan_vote_pct":14.0,"fan_vote_count":268.0,"round1_points":null,"round2_final_score":89.97},{"team":"Royal Family","series":"New York","round":"Round 2","opponent":"Brotherhood, Quick Style","total_score":86.16,"scores":[8.67,8.83,8.33,8.17,8.5,8.5,8.17,8.83,8.83,9.33],"fan_vote_pct":8.0,"fan_vote_count":155.0,"round1_points":null,"round2_final_score":86.25},{"team":"Royal Family","series":"Vancouver","round":"Round 1","opponent":"1Million","total_score":85.84,"scores":[8.0,8.33,8.5,8.17,7.5,9.17,8.5,9.0,9.0,9.67],"fan_vote_pct":24.0,"fan_vote_count":1889.0,"round1_points":3.0,"round2_final_score":null},{"team":"1Million","series":"Vancouver","round":"Round 1","opponent":"Royal Family","total_score":87.0,"scores":[8.33,8.5,8.67,8.5,8.5,8.33,8.83,8.67,9.17,9.5],"fan_vote_pct":76.0,"fan_vote_count":5890.0,"round1_points":4.0,"round2_final_score":null},{"team":"Quick Style","series":"Vancouver","round":"Round 1","opponent":"Jam Republic","total_score":84.0,"scores":[8.33,7.67,8.67,8.17,7.83,8.5,8.33,8.5,8.67,9.33],"fan_vote_pct":12.0,"fan_vote_count":1024.0,"round1_points":0.0,"round2_final_score":null},{"team":"Jam Republic","series":"Vancouver","round":"Round 1","opponent":"Quick Style","total_score":88.35,"scores":[8.67,8.33,8.67,8.5,8.67,9.0,8.67,8.67,9.5,9.67],"fan_vote_pct":88.0,"fan_vote_count":7709.0,"round1_points":7.0,"round2_final_score":null},{"team":"GRV","series":"Vancouver","round":"Round 1","opponent":"Brotherhood","total_score":90.17,"scores":[8.5,9.0,8.5,9.67,9.0,8.67,8.83,8.67,9.5,9.83],"fan_vote_pct":27.0,"fan_vote_count":2593.0,"round1_points":0.0,"round2_final_score":null},{"team":"Brotherhood","series":"Vancouver","round":"Round 1","opponent":"GRV","total_score":93.16,"scores":[8.83,8.67,9.33,9.33,9.0,9.67,9.5,8.83,10.0,10.0],"fan_vote_pct":73.0,"fan_vote_count":7078.0,"round1_points":7.0,"round2_final_score":null},{"team":"Brotherhood","series":"Vancouver","round":"Round 2","opponent":"Jam Republic, 1Million","total_score":93.99,"scores":[9.33,9.83,9.5,9.5,9.0,9.5,9.33,8.5,9.67,9.83],"fan_vote_pct":81.0,"fan_vote_count":6723.0,"round1_points":null,"round2_final_score":93.81},{"team":"Jam Republic","series":"Vancouver","round":"Round 2","opponent":"Brotherhood, 1Million","total_score":86.17,"scores":[7.67,8.33,9.17,8.5,7.83,8.83,8.67,8.5,9.17,9.5],"fan_vote_pct":15.0,"fan_vote_count":1205.0,"round1_points":null,"round2_final_score":86.31},{"team":"1Million","series":"Vancouver","round":"Round 2","opponent":"Brotherhood, Jam Republic","total_score":85.5,"scores":[8.0,8.5,8.5,8.33,8.0,8.5,8.67,8.5,9.0,9.5],"fan_vote_pct":4.0,"fan_vote_count":375.0,"round1_points":null,"round2_final_score":85.54},{"team":"Jam Republic","series":"Sydney","round":"Round 1","opponent":"GRV","total_score":81.0,"scores":[7.17,8.0,8.33,8.0,7.83,8.0,7.67,8.33,8.5,9.17],"fan_vote_pct":19.0,"fan_vote_count":1733.0,"round1_points":0.0,"round2_final_score":null},{"team":"GRV","series":"Sydney","round":"Round 1","opponent":"Jam Republic","total_score":88.83,"scores":[9.0,8.67,8.5,8.5,8.83,8.67,8.83,8.5,9.33,10.0],"fan_vote_pct":81.0,"fan_vote_count":7442.0,"round1_points":7.0,"round2_final_score":null},{"team":"Quick Style","series":"Sydney","round":"Round 1","opponent":"1Million","total_score":82.0,"scores":[8.0,8.33,8.33,8.16,8.17,7.0,8.17,8.17,8.67,9.0],"fan_vote_pct":11.0,"fan_vote_count":1008.0,"round1_points":0.0,"round2_final_score":null},{"team":"1Million","series":"Sydney","round":"Round 1","opponent":"Quick Style","total_score":86.0,"scores":[7.66,8.67,8.17,9.0,8.5,8.0,8.33,8.5,9.67,9.5],"fan_vote_pct":81.0,"fan_vote_count":7967.0,"round1_points":7.0,"round2_final_score":null},{"team":"Brotherhood","series":"Sydney","round":"Round 1","opponent":"Royal Family","total_score":92.17,"scores":[8.83,9.17,9.5,9.67,9.17,9.0,8.83,8.5,9.83,9.67],"fan_vote_pct":80.0,"fan_vote_count":8432.0,"round1_points":7.0,"round2_final_score":null},{"team":"Royal Family","series":"Sydney","round":"Round 1","opponent":"Brotherhood","total_score":88.17,"scores":[8.33,8.67,8.83,8.67,8.83,8.5,8.17,8.67,9.67,9.83],"fan_vote_pct":20.0,"fan_vote_count":2089.0,"round1_points":0.0,"round2_final_score":null},{"team":"Brotherhood","series":"Sydney","round":"Round 2","opponent":"GRV, 1Million","total_score":92.5,"scores":[9.0,9.16,9.17,9.0,9.17,9.17,9.0,9.0,9.83,10.0],"fan_vote_pct":69.0,"fan_vote_count":6339.0,"round1_points":null,"round2_final_score":93.19},{"team":"GRV","series":"Sydney","round":"Round 2","opponent":"Brotherhood, 1Million","total_score":90.66,"scores":[9.33,8.83,9.33,8.68,9.17,8.83,8.83,8.5,9.33,9.83],"fan_vote_pct":11.0,"fan_vote_count":981.0,"round1_points":null,"round2_final_score":90.77},{"team":"1Million","series":"Sydney","round":"Round 2","opponent":"Brotherhood, GRV","total_score":89.17,"scores":[8.33,8.83,8.68,8.83,8.83,8.17,9.0,8.83,9.67,10.0],"fan_vote_pct":20.0,"fan_vote_count":1833.0,"round1_points":null,"round2_final_score":89.37},{"team":"GRV","series":"Seoul","round":"Round 1","opponent":"Royal Family","total_score":84.08,"scores":[8.5,8.17,8.75,7.83,8.33,8.5,8.08,8.5,8.67,8.75],"fan_vote_pct":23.0,"fan_vote_count":2208.0,"round1_points":0.0,"round2_final_score":null},{"team":"Royal Family","series":"Seoul","round":"Round 1","opponent":"GRV","total_score":87.83,"scores":[8.67,8.67,8.75,8.5,8.75,8.83,8.58,8.5,9.08,9.5],"fan_vote_pct":77.0,"fan_vote_count":7296.0,"round1_points":7.0,"round2_final_score":null},{"team":"Brotherhood","series":"Seoul","round":"Round 1","opponent":"Quick Style","total_score":87.82,"scores":[8.83,8.83,8.75,8.42,8.58,8.92,8.33,8.58,9.25,9.33],"fan_vote_pct":76.0,"fan_vote_count":null,"round1_points":7.0,"round2_final_score":null},{"team":"Quick Style","series":"Seoul","round":"Round 1","opponent":"Brotherhood","total_score":84.83,"scores":[8.5,8.42,8.75,8.5,7.83,7.83,8.5,8.25,9.17,9.08],"fan_vote_pct":24.0,"fan_vote_count":null,"round1_points":0.0,"round2_final_score":null},{"team":"Jam Republic","series":"Seoul","round":"Round 1","opponent":"1Million","total_score":85.57,"scores":[8.83,8.5,8.83,8.08,8.17,8.58,8.5,8.33,8.67,9.08],"fan_vote_pct":41.0,"fan_vote_count":null,"round1_points":1.0,"round2_final_score":null},{"team":"1Million","series":"Seoul","round":"Round 1","opponent":"Jam Republic","total_score":88.25,"scores":[8.5,9.08,8.5,8.75,8.5,8.75,8.75,8.83,9.17,9.42],"fan_vote_pct":59.0,"fan_vote_count":null,"round1_points":6.0,"round2_final_score":null},{"team":"Brotherhood","series":"Seoul","round":"Round 2","opponent":"1Million, Royal Family","total_score":91.58,"scores":[9.25,9.17,9.25,9.08,8.67,9.33,8.92,9.08,9.25,9.58],"fan_vote_pct":67.0,"fan_vote_count":8882.0,"round1_points":null,"round2_final_score":92.25},{"team":"1Million","series":"Seoul","round":"Round 2","opponent":"Brotherhood, Royal Family","total_score":89.58,"scores":[8.58,9.33,8.66,9.0,8.92,8.67,8.83,8.92,9.25,9.42],"fan_vote_pct":26.0,"fan_vote_count":3450.0,"round1_points":null,"round2_final_score":89.84},{"team":"Royal Family","series":"Seoul","round":"Round 2","opponent":"Brotherhood, 1Million","total_score":87.83,"scores":[8.5,9.0,8.58,8.66,8.33,8.92,8.67,8.92,9.0,9.25],"fan_vote_pct":8.0,"fan_vote_count":1011.0,"round1_points":null,"round2_final_score":87.91},{"team":"Royal Family","series":"Los Angeles","round":"Round 1","opponent":"Quick Style","total_score":89.08,"scores":[8.83,9.0,8.67,8.83,9.25,8.5,8.83,8.58,9.25,9.33],"fan_vote_pct":80.0,"fan_vote_count":null,"round1_points":7.0,"round2_final_score":null},{"team":"Quick Style","series":"Los Angeles","round":"Round 1","opponent":"Royal Family","total_score":81.92,"scores":[8.17,8.0,8.33,8.0,8.17,7.92,8.08,8.08,8.33,8.83],"fan_vote_pct":20.0,"fan_vote_count":null,"round1_points":0.0,"round2_final_score":null},{"team":"Jam Republic","series":"Los Angeles","round":"Round 1","opponent":"Brotherhood","total_score":88.08,"scores":[8.83,8.75,9.0,8.83,8.75,8.75,8.58,8.42,9.08,9.08],"fan_vote_pct":13.0,"fan_vote_count":null,"round1_points":0.0,"round2_final_score":null},{"team":"Brotherhood","series":"Los Angeles","round":"Round 1","opponent":"Jam Republic","total_score":92.25,"scores":[9.17,9.0,9.08,9.42,9.25,9.17,9.08,8.92,9.67,9.5],"fan_vote_pct":87.0,"fan_vote_count":null,"round1_points":7.0,"round2_final_score":null},{"team":"1Million","series":"Los Angeles","round":"Round 1","opponent":"GRV","total_score":87.42,"scores":[8.5,8.92,8.75,8.58,8.75,8.5,8.5,8.5,9.17,9.25],"fan_vote_pct":43.0,"fan_vote_count":null,"round1_points":3.0,"round2_final_score":null},{"team":"GRV","series":"Los Angeles","round":"Round 1","opponent":"1Million","total_score":88.75,"scores":[8.92,8.83,8.83,8.58,8.92,8.92,8.58,8.75,9.17,9.25],"fan_vote_pct":57.0,"fan_vote_count":null,"round1_points":4.0,"round2_final_score":null},{"team":"Brotherhood","series":"Los Angeles","round":"Round 2","opponent":"GRV, Royal Family","total_score":95.83,"scores":[9.5,9.58,9.5,9.92,9.25,9.58,9.33,9.42,9.92,9.83],"fan_vote_pct":87.0,"fan_vote_count":null,"round1_points":null,"round2_final_score":96.7},{"team":"GRV","series":"Los Angeles","round":"Round 2","opponent":"Brotherhood, Royal Family","total_score":90.92,"scores":[9.17,8.83,9.25,8.75,8.92,9.17,8.92,9.08,9.33,9.5],"fan_vote_pct":7.0,"fan_vote_count":null,"round1_points":null,"round2_final_score":90.99},{"team":"Royal Family","series":"Los Angeles","round":"Round 2","opponent":"Brotherhood, GRV","total_score":89.25,"scores":[8.92,9.0,8.92,8.75,8.92,8.58,8.75,8.75,9.25,9.42],"fan_vote_pct":6.0,"fan_vote_count":null,"round1_points":null,"round2_final_score":89.31},{"team":"Brotherhood","series":"Championship","round":"Round 1","opponent":"Quick Style","total_score":91.92,"scores":[9.15,9.0,9.14,9.14,9.07,9.07,9.21,9.14,9.5,9.5],"fan_vote_pct":94.0,"fan_vote_count":null,"round1_points":7.0,"round2_final_score":null},{"team":"Quick Style","series":"Championship","round":"Round 1","opponent":"Brotherhood","total_score":83.0,"scores":[8.07,8.29,8.36,8.0,8.14,8.21,8.14,8.44,8.64,8.71],"fan_vote_pct":6.0,"fan_vote_count":null,"round1_points":0.0,"round2_final_score":null},{"team":"Royal Family","series":"Championship","round":"Round 1","opponent":"Jam Republic","total_score":88.22,"scores":[8.57,8.71,8.57,8.43,8.93,8.86,8.79,8.86,9.21,9.29],"fan_vote_pct":19.0,"fan_vote_count":null,"round1_points":2.0,"round2_final_score":null},{"team":"Jam Republic","series":"Championship","round":"Round 1","opponent":"Royal Family","total_score":89.16,"scores":[9.0,8.86,9.0,8.57,8.86,8.43,8.93,8.79,9.43,9.29],"fan_vote_pct":81.0,"fan_vote_count":null,"round1_points":5.0,"round2_final_score":null},{"team":"1Million","series":"Championship","round":"Round 1","opponent":"GRV","total_score":89.59,"scores":[8.93,9.0,8.93,8.79,9.0,8.86,9.0,8.79,9.0,9.29],"fan_vote_pct":67.0,"fan_vote_count":null,"round1_points":1.0,"round2_final_score":null},{"team":"GRV","series":"Championship","round":"Round 1","opponent":"1Million","total_score":90.73,"scores":[9.36,8.86,9.29,9.0,8.93,8.43,9.0,8.86,9.5,9.5],"fan_vote_pct":33.0,"fan_vote_count":null,"round1_points":6.0,"round2_final_score":null},{"team":"GRV","series":"Championship","round":"Round 2","opponent":"Brotherhood, Jam Republic","total_score":94.01,"scores":[9.36,9.36,9.5,9.29,9.43,9.21,9.36,9.07,9.64,9.79],"fan_vote_pct":null,"fan_vote_count":null,"round1_points":null,"round2_final_score":94.0},{"team":"Brotherhood","series":"Championship","round":"Round 2","opponent":"GRV, Jam Republic","total_score":93.58,"scores":[9.29,9.21,9.36,9.29,9.21,9.29,9.14,9.36,9.79,9.64],"fan_vote_pct":null,"fan_vote_count":null,"round1_points":null,"round2_final_score":93.57},{"team":"Jam Republic","series":"Championship","round":"Round 2","opponent":"GRV, Brotherhood","total_score":90.85,"scores":[8.93,9.21,9.21,9.0,8.79,9.0,9.0,9.07,9.5,9.14],"fan_vote_pct":null,"fan_vote_count":null,"round1_points":null,"round2_final_score":90.86}]};
 
-const TEAM_COLORS = {
-  "Brotherhood": "var(--c-bh)",
-  "GRV": "var(--c-grv)",
-  "1Million": "var(--c-1m)",
-  "Quick Style": "var(--c-qs)",
-  "Jam Republic": "var(--c-jr)",
-  "Royal Family": "var(--c-rf)"
-};
-// resolved hex (canvas can't read CSS vars directly in JS contexts reliably for canvas fill, so hardcode)
 const TEAM_HEX = {
   "Brotherhood": "#dc2626",
   "GRV": "#15803d",
@@ -283,8 +506,32 @@ const TEAM_HEX = {
 };
 
 const TEAMS = Object.keys(TEAM_HEX);
-const SERIES = ["New York", "Vancouver", "Sydney", "Seoul"];
+const SERIES = ["New York", "Vancouver", "Sydney", "Seoul", "Los Angeles", "Championship"];
 const LABELS = DATA.labels;
+
+const SEASON_LABELS = LABELS.map(l => {
+  if (l === "Stylistic Athleticism") return ["Stylistic", "Athleticism"];
+  if (l === "Technical Execution And Authenticity") return ["Technical Execution", "and Authenticity"];
+  if (l === "Projection Communication") return ["Projection /", "Communication"];
+  return l;
+});
+
+/* Register the datalabels plugin globally, but disabled by default so it only
+   applies where explicitly turned on (the radar charts) — bar/line/sparkline
+   charts elsewhere on the page are unaffected. */
+Chart.register(ChartDataLabels);
+Chart.defaults.set('plugins.datalabels', { display: false });
+
+/* Shared radar pointLabels config: renders the multi-line/renamed criteria
+   labels around the edge. Used by the Season Overview master grid, Team Deep
+   Dive, and Performance Explorer radar charts alike. */
+const seasonPointLabels = {
+  display: true,
+  color: '#5b5f6a',
+  font: { size: 10.5, family: 'Inter' },
+  padding: 6,
+  callback: (label, index) => SEASON_LABELS[index]
+};
 
 function average(rows) {
   const n = rows.length;
@@ -297,7 +544,7 @@ function hexAlpha(hex, alpha) {
   return hex + alpha;
 }
 
-/* ---------------- MASTER GRID ---------------- */
+/* ================= MASTER GRID ================= */
 const masterGrid = document.getElementById('masterGrid');
 TEAMS.forEach(team => {
   const rows = DATA.rows.filter(r => r.team === team);
@@ -310,7 +557,7 @@ TEAMS.forEach(team => {
   card.innerHTML = `
     <div class="card-header">
       <span class="team-name">${team}</span>
-      <span class="team-avg">Σ ${overall}</span>
+      <span class="team-avg">&Sigma; ${overall}</span>
     </div>
     <canvas></canvas>
   `;
@@ -332,26 +579,379 @@ TEAMS.forEach(team => {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display:false }, tooltip: { enabled:true } },
+      plugins: {
+        legend: { display:false },
+        tooltip: { enabled:true, callbacks: { title: (items) => LABELS[items[0].dataIndex] } },
+        datalabels: {
+          display: true,
+          color: TEAM_HEX[team],
+          backgroundColor: 'rgba(255,255,255,0.82)',
+          borderRadius: 3,
+          padding: { top:1, bottom:1, left:3, right:3 },
+          font: { size: 8, weight: 600, family: 'Inter' },
+          formatter: (value) => value.toFixed(2),
+          anchor: 'end',
+          align: 'end',
+          offset: 2
+        }
+      },
       scales: {
         r: {
           min: 7.5, max: 10,
           ticks: { display:false },
           grid: { color: '#e0e0da' },
           angleLines: { color: '#e0e0da' },
-          pointLabels: {
-            display: true,
-            color: '#5b5f6a',
-            font: { size: 10.5, family: 'Inter' },
-            padding: 6
-          }
+          pointLabels: seasonPointLabels
         }
       }
     }
   });
 });
 
-/* ---------------- INDIVIDUAL VIZ ---------------- */
+/* ================= FAN VOTE TABLE ================= */
+function buildMatches() {
+  const groups = {};
+  DATA.rows.forEach(r => {
+    let key;
+    if (r.round === 'Round 2') {
+      key = r.series + '||Round2';
+    } else {
+      const pairKey = [r.team, r.opponent].sort().join('~');
+      key = r.series + '||' + r.round + '||' + pairKey;
+    }
+    (groups[key] = groups[key] || []).push(r);
+  });
+  return Object.values(groups);
+}
+
+function matchSortKey(m) {
+  const seriesIdx = SERIES.indexOf(m[0].series);
+  const roundRank = m[0].round === 'Round 1' ? 0 : 1;
+  return seriesIdx * 10 + roundRank;
+}
+
+function scoreFieldFor(round) {
+  return round === 'Round 2' ? 'round2_final_score' : 'total_score';
+}
+
+const allMatches = buildMatches().sort((a,b) => matchSortKey(a) - matchSortKey(b));
+const votedMatches = allMatches.filter(m => m.every(r => r.fan_vote_pct != null));
+const excludedCount = allMatches.length - votedMatches.length;
+
+const fanVoteBody = document.getElementById('fanVoteBody');
+const fanVoteNote = document.getElementById('fanVoteNote');
+const fanVoteExpand = document.getElementById('fanVoteExpand');
+let fanVoteExpanded = false;
+const FAN_VOTE_PREVIEW = 10;
+
+function renderFanVoteTable() {
+  fanVoteBody.innerHTML = '';
+  const toShow = fanVoteExpanded ? votedMatches : votedMatches.slice(0, FAN_VOTE_PREVIEW);
+  toShow.forEach(m => {
+    const sf = scoreFieldFor(m[0].round);
+    const topFan = [...m].sort((a,b) => b.fan_vote_pct - a.fan_vote_pct)[0];
+    const topScore = [...m].sort((a,b) => b[sf] - a[sf])[0];
+    const disagree = topFan.team !== topScore.team;
+
+    let closeVote = false;
+    for (let a = 0; a < m.length && !closeVote; a++) {
+      for (let b = a + 1; b < m.length; b++) {
+        const inBandA = m[a].fan_vote_pct >= 40 && m[a].fan_vote_pct <= 60;
+        const inBandB = m[b].fan_vote_pct >= 40 && m[b].fan_vote_pct <= 60;
+        if (inBandA && inBandB) { closeVote = true; break; }
+      }
+    }
+
+    const tr = document.createElement('tr');
+    if (disagree) tr.className = 'disagree';
+    else if (closeVote) tr.className = 'close-vote';
+    const matchup = m.map(r => r.team).join(' vs ');
+    const votes = m.map(r => r.fan_vote_pct + '%').join(' vs ');
+    const scores = m.map(r => r[sf].toFixed(2)).join(' vs ');
+    tr.innerHTML = `<td>${m[0].series}</td><td>${m[0].round}</td><td>${matchup}</td><td>${votes}</td><td>${scores}</td>`;
+    fanVoteBody.appendChild(tr);
+  });
+  fanVoteNote.textContent = `Showing ${toShow.length} of ${votedMatches.length} matches with fan vote data shown on the site` +
+    (excludedCount ? ` (${excludedCount} excluded — no fan vote displayed for that round, e.g. Championship Round 2)` : '');
+  fanVoteExpand.textContent = fanVoteExpanded ? 'Show fewer' : `Show all ${votedMatches.length}`;
+  fanVoteExpand.style.display = votedMatches.length > FAN_VOTE_PREVIEW ? 'inline-block' : 'none';
+}
+fanVoteExpand.addEventListener('click', () => { fanVoteExpanded = !fanVoteExpanded; renderFanVoteTable(); });
+renderFanVoteTable();
+
+/* ================= ROUND 1 & ROUND 2 LINE CHART ================= */
+/* Solid line + star = Round 1 total_score (always present, every series).
+   Dashed line + open circle = Round 2 total_score (pure judged, no fan bonus),
+   plotted like a scatter: a point only exists where the team reached Round 2
+   that series. A dashed segment is drawn only between two series that are
+   BOTH non-null and adjacent — an isolated Round 2 result never connects back
+   to a neighbouring series' Round 1 star. */
+let lineTeams = new Set(["1Million", "Royal Family"]);
+const lineTeamChipsEl = document.getElementById('lineTeamChips');
+
+TEAMS.forEach(team => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.textContent = team;
+  const c = TEAM_HEX[team];
+  const paint = () => {
+    const on = lineTeams.has(team);
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? (c + '1f') : 'transparent';
+    chip.style.borderColor = on ? c : 'var(--border)';
+    chip.style.color = on ? c : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    lineTeams.has(team) ? lineTeams.delete(team) : lineTeams.add(team);
+    paint(); renderLine();
+  });
+  paint();
+  lineTeamChipsEl.appendChild(chip);
+});
+
+let showR1Line = true;
+let showR2Line = true;
+const lineVisibilityToggleEl = document.getElementById('lineVisibilityToggles');
+[
+  { key: 'r1', label: 'Round 1 line', get: () => showR1Line, set: (v) => showR1Line = v },
+  { key: 'r2', label: 'Round 2 line', get: () => showR2Line, set: (v) => showR2Line = v }
+].forEach(cfg => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  const paint = () => {
+    const on = cfg.get();
+    chip.textContent = cfg.label + ': ' + (on ? 'On' : 'Off');
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? 'var(--accent)' : 'transparent';
+    chip.style.borderColor = on ? 'var(--accent)' : 'var(--border)';
+    chip.style.color = on ? '#fff' : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    cfg.set(!cfg.get());
+    paint(); renderLine();
+  });
+  paint();
+  lineVisibilityToggleEl.appendChild(chip);
+});
+
+const lineChart = new Chart(document.getElementById('progressionLine'), {
+  type: 'line',
+  data: { labels: SERIES, datasets: [] },
+  options: {
+    responsive: true, maintainAspectRatio:false,
+    plugins: {
+      legend: {
+        position:'bottom',
+        labels: {
+          color:'#5b5f6a', font:{family:'Inter',size:11}, usePointStyle:true, boxWidth:8,
+          filter: (item) => item.datasetIndex % 2 === 0 /* one legend entry per team (the R1/solid dataset) */
+        }
+      }
+    },
+    scales: {
+      x: { grid:{color:'#e0e0da'}, ticks:{color:'#5b5f6a', font:{size:11}} },
+      y: { min:78, max:100, grid:{color:'#e0e0da'}, ticks:{color:'#8b8f99', font:{size:10}} }
+    }
+  }
+});
+
+function buildTeamLines(team, r1Visible, r2Visible) {
+  const hasFinal = SERIES.map(s => !!DATA.rows.find(r => r.team===team && r.series===s && r.round==='Round 2'));
+  const r1Val = SERIES.map(s => {
+    const row = DATA.rows.find(r => r.team===team && r.series===s && r.round==='Round 1');
+    return row ? row.total_score : null; /* every team competes in Round 1 every series */
+  });
+  const finalVal = SERIES.map(s => {
+    const row = DATA.rows.find(r => r.team===team && r.series===s && r.round==='Round 2');
+    return row ? row.total_score : null;
+  });
+
+  /* R2 is plotted like a scatter: a value only where the team actually reached
+     Round 2 that series, null everywhere else. Chart.js only draws a dashed
+     segment between two mutually adjacent non-null points, so an isolated R2
+     result shows as a lone open circle with no line touching it — it never
+     connects back to a neighbouring series' Round 1 star. */
+  const dashedData = SERIES.map((s, i) => hasFinal[i] ? finalVal[i] : null);
+  const dashedRadius = SERIES.map((s, i) => hasFinal[i] ? 8 : 0);
+
+  const c = TEAM_HEX[team];
+  return [
+    {
+      label: team + ' — Round 1',
+      data: r1Val,
+      borderColor: c, backgroundColor: c, borderWidth:2, borderDash: [],
+      pointStyle: 'star', pointRadius: 8, pointBackgroundColor: c, pointBorderColor: c,
+      tension: 0, spanGaps: false,
+      hidden: !r1Visible /* toggle fully hides this dataset — line and star markers both disappear */
+    },
+    {
+      label: team + ' — Round 2',
+      data: dashedData,
+      borderColor: c, backgroundColor: 'rgba(0,0,0,0)', borderWidth:2, borderDash: [6,4],
+      pointStyle: 'circle', pointRadius: dashedRadius,
+      pointBackgroundColor: 'rgba(0,0,0,0)', pointBorderColor: c, pointBorderWidth: 2,
+      tension: 0, spanGaps: false,
+      hidden: !r2Visible /* toggle hides both the dashed line and the circle markers */
+    }
+  ];
+}
+
+function renderLine() {
+  let datasets = [];
+  TEAMS.filter(t => lineTeams.has(t)).forEach(team => {
+    datasets = datasets.concat(buildTeamLines(team, showR1Line, showR2Line));
+  });
+  lineChart.data.datasets = datasets;
+  lineChart.update();
+}
+renderLine();
+
+/* ================= HARDEST CRITERIA BAR ================= */
+function criteriaStats() {
+  const stats = LABELS.map((label, i) => {
+    const vals = DATA.rows.map(r => r.scores[i]);
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    return { label, avg: +avg.toFixed(3), min: Math.min(...vals), max: Math.max(...vals) };
+  });
+  return stats.sort((a,b) => a.avg - b.avg);
+}
+const cStats = criteriaStats();
+new Chart(document.getElementById('criteriaBar'), {
+  type: 'bar',
+  data: {
+    labels: cStats.map(s => s.label),
+    datasets: [{
+      data: cStats.map(s => s.avg),
+      backgroundColor: 'rgba(74,84,217,0.55)',
+      borderColor: '#4a54d9',
+      borderWidth: 1,
+      borderRadius: 4,
+      barThickness: 22
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio:false,
+    plugins: {
+      legend: { display:false },
+      tooltip: { callbacks: { label: (item) => {
+        const s = cStats[item.dataIndex];
+        return `avg ${s.avg.toFixed(2)}  ·  range ${s.min.toFixed(2)}–${s.max.toFixed(2)}`;
+      } } }
+    },
+    scales: {
+      x: { min:7, max:10, grid:{color:'#e0e0da'}, ticks:{color:'#8b8f99', font:{size:10}} },
+      y: { grid:{display:false}, ticks:{color:'#5b5f6a', font:{size:11}} }
+    }
+  }
+});
+
+/* ================= TEAM EVOLUTION SPARKLINES ================= */
+const SERIES_ABBR = {
+  "New York": "NY", "Vancouver": "VA", "Sydney": "SY",
+  "Seoul": "SE", "Los Angeles": "LA", "Championship": "CH"
+};
+const SERIES_LABELS_ABBR = SERIES.map(s => SERIES_ABBR[s]);
+
+let evoTeam = "Brotherhood";
+const evoTeamChipsEl = document.getElementById('evoTeamChips');
+const sparklineGridTop = document.getElementById('sparklineGridTop');
+const sparklineGridBottom = document.getElementById('sparklineGridBottom');
+const evoChipEls = [];
+let sparkCharts = [];
+
+TEAMS.forEach(team => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.textContent = team;
+  const c = TEAM_HEX[team];
+  const paint = () => {
+    const on = evoTeam === team;
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? (c + '1f') : 'transparent';
+    chip.style.borderColor = on ? c : 'var(--border)';
+    chip.style.color = on ? c : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    evoTeam = team;
+    evoChipEls.forEach(p => p());
+    renderEvolution();
+  });
+  evoTeamChipsEl.appendChild(chip);
+  evoChipEls.push(paint);
+});
+evoChipEls.forEach(p => p());
+
+function seriesAvgForTeam(team) {
+  return LABELS.map((_, ci) => SERIES.map(s => {
+    const rows = DATA.rows.filter(r => r.team===team && r.series===s);
+    if (!rows.length) return null;
+    const v = rows.reduce((a,r) => a + r.scores[ci], 0) / rows.length;
+    return +v.toFixed(3);
+  }));
+}
+
+function renderEvolution() {
+  sparkCharts.forEach(c => c.destroy());
+  sparkCharts = [];
+  sparklineGridTop.innerHTML = '';
+  sparklineGridBottom.innerHTML = '';
+  const c = TEAM_HEX[evoTeam];
+  const perCriterion = seriesAvgForTeam(evoTeam);
+
+  LABELS.forEach((label, i) => {
+    const series = perCriterion[i];
+    const known = series.filter(v => v != null);
+    const first = known[0], last = known[known.length - 1];
+    const delta = +(last - first).toFixed(2);
+    const deltaClass = delta > 0.03 ? 'up' : (delta < -0.03 ? 'down' : 'flat');
+    const deltaLabel = (delta > 0 ? '+' : '') + delta.toFixed(2);
+
+    const card = document.createElement('div');
+    card.className = 'spark-card';
+    card.innerHTML = `
+      <div class="spark-card-header">
+        <span class="spark-title">${label}</span>
+        <span class="spark-delta ${deltaClass}">${deltaLabel}</span>
+      </div>
+      <canvas></canvas>
+    `;
+    (i < 9 ? sparklineGridTop : sparklineGridBottom).appendChild(card);
+
+    const yMin = Math.min(...known) - 0.15;
+    const yMax = Math.max(...known) + 0.15;
+
+    const chart = new Chart(card.querySelector('canvas'), {
+      type: 'line',
+      data: { labels: SERIES_LABELS_ABBR, datasets: [{
+        data: series, borderColor:c, backgroundColor:c,
+        borderWidth:2, pointRadius:2.5, pointBackgroundColor:c, tension:0.2, spanGaps:true
+      }] },
+      options: {
+        responsive: true, maintainAspectRatio:false,
+        plugins: {
+          legend: { display:false },
+          tooltip: { callbacks: { title: (items) => SERIES[items[0].dataIndex] } }
+        },
+        scales: {
+          x: {
+            display:true, grid:{ display:false },
+            ticks: { color:'#8b8f99', font:{size:8}, maxRotation:0, minRotation:0 }
+          },
+          y: {
+            display:true, min: yMin, max: yMax,
+            ticks: { count:3, color:'#8b8f99', font:{size:7.5}, callback: (v) => v.toFixed(1) },
+            grid: { color:'#ececE6' }
+          }
+        }
+      }
+    });
+    sparkCharts.push(chart);
+  });
+}
+renderEvolution();
+
+/* ================= TEAM DEEP DIVE ================= */
 let activeTeams = new Set(["1Million", "Royal Family"]);
 let activeSeries = new Set(SERIES);
 let activeRound = "All";
@@ -399,7 +999,7 @@ SERIES.forEach(s => {
   seriesChipsEl.appendChild(chip);
 });
 
-["All", "Round 1", "Final"].forEach(r => {
+["All", "Round 1", "Round 2"].forEach(r => {
   const chip = document.createElement('button');
   chip.className = 'chip' + (r === activeRound ? ' active' : '');
   chip.textContent = r;
@@ -429,7 +1029,7 @@ let individualChart = new Chart(indCtx, {
         ticks: { stepSize:0.5, color:'#8b8f99', font:{size:10}, backdropColor:'transparent' },
         grid: { color:'#e0e0da' },
         angleLines: { color:'#e0e0da' },
-        pointLabels: { color:'#5b5f6a', font:{size:11} }
+        pointLabels: seasonPointLabels
       }
     }
   }
@@ -464,6 +1064,100 @@ function renderIndividual() {
   indCtx.style.display = (datasets.length === 0 || !anyData) ? 'none' : 'block';
 }
 renderIndividual();
+
+/* ================= PERFORMANCE EXPLORER ================= */
+const teamSelA = document.getElementById('explorerTeamA');
+const seriesSelA = document.getElementById('explorerSeriesA');
+const roundSelA = document.getElementById('explorerRoundA');
+const teamSelB = document.getElementById('explorerTeamB');
+const seriesSelB = document.getElementById('explorerSeriesB');
+const roundSelB = document.getElementById('explorerRoundB');
+
+function fillSelect(sel, items) {
+  sel.innerHTML = items.map(i => `<option value="${i}">${i}</option>`).join('');
+}
+fillSelect(teamSelA, TEAMS); fillSelect(teamSelB, TEAMS);
+fillSelect(seriesSelA, SERIES); fillSelect(seriesSelB, SERIES);
+
+function availableRounds(team, series) {
+  const rounds = DATA.rows.filter(r => r.team===team && r.series===series).map(r => r.round);
+  return rounds.length ? rounds : ['Round 1'];
+}
+
+function refreshRounds(teamSel, seriesSel, roundSel, preferred) {
+  const rounds = availableRounds(teamSel.value, seriesSel.value);
+  fillSelect(roundSel, rounds);
+  if (preferred && rounds.includes(preferred)) roundSel.value = preferred;
+}
+
+teamSelA.value = "GRV"; seriesSelA.value = "Sydney";
+refreshRounds(teamSelA, seriesSelA, roundSelA, "Round 1");
+
+teamSelB.value = "GRV"; seriesSelB.value = "Championship";
+refreshRounds(teamSelB, seriesSelB, roundSelB, "Round 2");
+
+[teamSelA, seriesSelA].forEach(el => el.addEventListener('change', () => { refreshRounds(teamSelA, seriesSelA, roundSelA); renderExplorer(); }));
+[teamSelB, seriesSelB].forEach(el => el.addEventListener('change', () => { refreshRounds(teamSelB, seriesSelB, roundSelB); renderExplorer(); }));
+roundSelA.addEventListener('change', renderExplorer);
+roundSelB.addEventListener('change', renderExplorer);
+
+const explorerChart = new Chart(document.getElementById('explorerChart'), {
+  type: 'radar',
+  data: { labels: LABELS, datasets: [] },
+  options: {
+    responsive: true, maintainAspectRatio:false,
+    plugins: { legend: { position:'bottom', labels:{ color:'#5b5f6a', font:{family:'Inter',size:12}, usePointStyle:true, boxWidth:8 } } },
+    scales: {
+      r: {
+        min:7, max:10,
+        ticks: { stepSize:0.5, color:'#8b8f99', font:{size:10}, backdropColor:'transparent' },
+        grid: { color:'#e0e0da' }, angleLines: { color:'#e0e0da' },
+        pointLabels: seasonPointLabels
+      }
+    }
+  }
+});
+
+function findRow(team, series, round) {
+  return DATA.rows.find(r => r.team===team && r.series===series && r.round===round);
+}
+
+const explorerTable = document.getElementById('explorerCompareTable');
+
+function fmt(v, suffix) {
+  return (v === null || v === undefined) ? '—' : (suffix ? v + suffix : v);
+}
+
+function renderExplorer() {
+  const rowA = findRow(teamSelA.value, seriesSelA.value, roundSelA.value);
+  const rowB = findRow(teamSelB.value, seriesSelB.value, roundSelB.value);
+  const datasets = [];
+  if (rowA) datasets.push({
+    label: `${rowA.team} — ${rowA.series} ${rowA.round}`,
+    data: rowA.scores, borderColor: TEAM_HEX[rowA.team], backgroundColor: hexAlpha(TEAM_HEX[rowA.team], '33'),
+    borderWidth:2, pointRadius:3, pointBackgroundColor: TEAM_HEX[rowA.team]
+  });
+  if (rowB) datasets.push({
+    label: `${rowB.team} — ${rowB.series} ${rowB.round}`,
+    data: rowB.scores, borderColor: TEAM_HEX[rowB.team], backgroundColor: hexAlpha(TEAM_HEX[rowB.team], '33'),
+    borderWidth:2, pointRadius:3, pointBackgroundColor: TEAM_HEX[rowB.team],
+    borderDash: (rowA && rowB && rowA.team === rowB.team) ? [6,4] : []
+  });
+  explorerChart.data.datasets = datasets;
+  explorerChart.update();
+
+  const rows = [
+    ['Total Score', rowA ? fmt(rowA.total_score) : '—', rowB ? fmt(rowB.total_score) : '—'],
+    ['Fan Vote %', rowA ? fmt(rowA.fan_vote_pct, '%') : '—', rowB ? fmt(rowB.fan_vote_pct, '%') : '—'],
+    ['Round 1 Points', rowA ? fmt(rowA.round1_points) : '—', rowB ? fmt(rowB.round1_points) : '—'],
+    ['Round 2 Score (fan-vote adj.)', rowA ? fmt(rowA.round2_final_score) : '—', rowB ? fmt(rowB.round2_final_score) : '—']
+  ];
+  explorerTable.innerHTML = `
+    <thead><tr><th></th><th>${rowA ? rowA.team+' · '+rowA.series+' '+rowA.round : 'A'}</th><th>${rowB ? rowB.team+' · '+rowB.series+' '+rowB.round : 'B'}</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody>
+  `;
+}
+renderExplorer();
 </script>
 </body>
 </html>
