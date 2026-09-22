@@ -386,52 +386,24 @@
     <strong>DISCLAIMER:</strong> I do not think dance is quantifiable. This is an exploration of the system IDL has used to attempt the impossible task of objectively assessing performances. It is for personal interest only and NOT for demonstrating one team's superiority over another.
   </div>
 
-  <!-- ============ SEASON OVERVIEW ============ -->
+  <!-- 1. HARDEST CRITERIA -->
   <section>
-    <h2 class="section-title">Season Overview</h2>
-    <p class="section-sub">Average score per criterion across all completed performances (Round 1 + Round 2) — New York → Championship</p>
-    <div class="grid" id="masterGrid"></div>
-
-    <h3 class="subsection-title">Fan Vote vs Judges' Scores</h3>
-    <p class="subsection-sub">Every matchup with fan vote data shown on the site, flagged where the fan favorite didn't have the higher score</p>
-    <div class="table-wrap">
-      <table class="fanvote" id="fanVoteTable">
-        <thead>
-          <tr><th>Series</th><th>Round</th><th>Matchup</th><th>Fan Votes %</th><th>Score</th></tr>
-        </thead>
-        <tbody id="fanVoteBody"></tbody>
-      </table>
-      <div class="table-footer">
-        <p class="table-note" id="fanVoteNote"></p>
-        <button class="expand-btn" id="fanVoteExpand">Show all</button>
-      </div>
-    </div>
-    <p class="legend-note"><span class="legend-swatch"></span>Fan vote leader did not have the higher score</p>
-    <p class="legend-note" style="margin-top:4px;"><span class="legend-swatch close"></span>Any two teams both landed between 40% and 60% of the fan vote (red takes priority when both apply)</p>
-
-    <h3 class="subsection-title">Round 1 and Round 2 Score Progression</h3>
-    <p class="subsection-sub">Solid line, star markers = Round 1 judged score. Dashed line, open circle markers = Final round judged score — no fan-vote bonus applied. Note teams do not always reach round 2.</p>
-    <div class="control-row" id="lineTeamChips" style="margin-bottom:12px;"></div>
-    <div class="control-row" id="lineVisibilityToggles" style="margin-bottom:14px;"></div>
-    <div class="chart-panel"><canvas id="progressionLine"></canvas></div>
-
-    <h3 class="subsection-title">Hardest Criteria to Score Well In</h3>
-    <p class="subsection-sub">League-wide average per criterion across all 54 performances, lowest (hardest) first — hover a bar for its full range</p>
+    <h2 class="section-title">Hardest Criteria to Score Well In</h2>
+    <p class="section-sub">League-wide average per criterion across all 54 performances, lowest (hardest) first — hover a bar for its full range</p>
     <div class="chart-panel"><canvas id="criteriaBar" style="height:380px !important;"></canvas></div>
   </section>
 
-  <!-- ============ TEAM EVOLUTION ============ -->
+  <!-- 2. CRITERIA AVERAGES BY TEAM -->
   <section>
-    <h2 class="section-title">Team Evolution</h2>
-    <p class="section-sub">Per-criterion trend across series for one team at a time — each point averages Round 1 and Round 2 when a team reached both that series</p>
-    <div class="control-row" id="evoTeamChips" style="margin-bottom:22px;"></div>
-    <div class="sparkline-grid sparkline-grid-3" id="sparklineGridTop"></div>
-    <div class="sparkline-grid sparkline-single-row" id="sparklineGridBottom"></div>
+    <h2 class="section-title">Criteria Averages by Team</h2>
+    <p class="section-sub">Average score per criterion for one team, across all completed performances (Round 1 + Round 2) — sorted lowest to highest</p>
+    <div class="control-row" id="teamBarChips" style="margin-bottom:14px;"></div>
+    <div class="chart-panel"><canvas id="teamCriteriaBar" style="height:380px !important;"></canvas></div>
   </section>
 
-  <!-- ============ TEAM DEEP DIVE ============ -->
+  <!-- 3. ALTERNATIVE CRITERIA AGGREGATES EXPLORATION (formerly Team Deep Dive) -->
   <section>
-    <h2 class="section-title">Team Deep Dive</h2>
+    <h2 class="section-title">Alternative Criteria Aggregates Exploration</h2>
     <p class="section-sub">Toggle teams on/off, and filter by series or round to compare aggregate performance profiles</p>
 
     <div class="controls">
@@ -455,9 +427,34 @@
     </div>
   </section>
 
-  <!-- ============ PERFORMANCE EXPLORER ============ -->
+  <!-- 4. TEAM RADAR PROFILES (master grid) -->
   <section>
-    <h2 class="section-title">Performance Explorer</h2>
+    <h2 class="section-title">Team Radar Profiles</h2>
+    <p class="section-sub">Average score per criterion across all completed performances (Round 1 + Round 2) — New York → Championship</p>
+    <div class="grid" id="masterGrid"></div>
+  </section>
+
+  <!-- 5. ROUND 1 AND ROUND 2 SCORE PROGRESSION -->
+  <section>
+    <h2 class="section-title">Round 1 and Round 2 Score Progression</h2>
+    <p class="section-sub">Solid line, star markers = Round 1 judged score. Dashed line, open circle markers = Final round judged score — no fan-vote bonus applied. Note teams do not always reach round 2.</p>
+    <div class="control-row" id="lineTeamChips" style="margin-bottom:12px;"></div>
+    <div class="control-row" id="lineVisibilityToggles" style="margin-bottom:14px;"></div>
+    <div class="chart-panel"><canvas id="progressionLine"></canvas></div>
+  </section>
+
+  <!-- 6. TEAM EVOLUTION -->
+  <section>
+    <h2 class="section-title">Team Evolution</h2>
+    <p class="section-sub">Per-criterion trend across series for one team at a time — each point averages Round 1 and Round 2 when a team reached both that series</p>
+    <div class="control-row" id="evoTeamChips" style="margin-bottom:22px;"></div>
+    <div class="sparkline-grid sparkline-grid-3" id="sparklineGridTop"></div>
+    <div class="sparkline-grid sparkline-single-row" id="sparklineGridBottom"></div>
+  </section>
+
+  <!-- 7. PERFORMANCE COMPARISONS (formerly Performance Explorer) -->
+  <section>
+    <h2 class="section-title">Performance Comparisons</h2>
     <p class="section-sub">Compare two exact performances head-to-head — actual scoresheets, not averages</p>
 
     <div class="explorer-controls">
@@ -481,11 +478,31 @@
     <table class="explorer-compare" id="explorerCompareTable"></table>
   </section>
 
+  <!-- 8. FAN VOTE VS JUDGES' SCORES -->
+  <section>
+    <h2 class="section-title">Fan Vote vs Judges' Scores</h2>
+    <p class="section-sub">Every matchup with fan vote data shown on the site, flagged where the fan favorite didn't have the higher score</p>
+    <div class="table-wrap">
+      <table class="fanvote" id="fanVoteTable">
+        <thead>
+          <tr><th>Series</th><th>Round</th><th>Matchup</th><th>Fan Votes %</th><th>Score</th></tr>
+        </thead>
+        <tbody id="fanVoteBody"></tbody>
+      </table>
+      <div class="table-footer">
+        <p class="table-note" id="fanVoteNote"></p>
+        <button class="expand-btn" id="fanVoteExpand">Show all</button>
+      </div>
+    </div>
+    <p class="legend-note"><span class="legend-swatch"></span>Fan vote leader did not have the higher score</p>
+    <p class="legend-note" style="margin-top:4px;"><span class="legend-swatch close"></span>Any two teams both landed between 40% and 60% of the fan vote (red takes priority when both apply)</p>
+  </section>
+
   <!-- ============ AI DILIGENCE STATEMENT ============ -->
   <section style="margin-bottom:0;">
     <div class="ai-statement">
       <h3>AI Diligence Statement</h3>
-      <p>This dashboard was built in collaboration with Claude (Anthropic), which assisted with retrieving and structuring the underlying scoresheet data from idl.pro, performing the calculations shown, and generating the visualizations and code for this page. The original build covered the Season Overview and Team Deep Dive views for four series; a later pass added the Los Angeles and Championship series along with the Fan Vote, Round Progression, Team Evolution, and Performance Explorer views.</p>
+      <p>This dashboard was built in collaboration with Claude (Anthropic), which assisted with retrieving and structuring the underlying scoresheet data from idl.pro, performing the calculations shown, and generating the visualizations and code for this page. The original build covered the Season Overview and Team Deep Dive views for four series; later passes added the Los Angeles and Championship series, the Fan Vote, Round Progression, Team Evolution, Performance Comparisons, and Criteria Averages by Team views, and reorganized the page into its current order.</p>
       <p>I, Samuel Walker, have reviewed the data, calculations, and visualizations presented here for accuracy and reasonableness, and I take full responsibility for the content and conclusions of this document.</p>
       <div class="sig">Prepared with AI assistance · Reviewed and approved by <b>Samuel Walker</b></div>
     </div>
@@ -743,8 +760,8 @@ const lineChart = new Chart(document.getElementById('progressionLine'), {
       legend: {
         position:'bottom',
         labels: {
-          color:'#5b5f6a', font:{family:'Inter',size:11}, usePointStyle:true, boxWidth:8,
-          filter: (item) => item.datasetIndex % 2 === 0 /* one legend entry per team (the R1/solid dataset) */
+          color:'#5b5f6a', font:{family:'Inter',size:11}, usePointStyle:true, boxWidth:8
+          /* no filter — both the Round 1 (star) and Round 2 (circle) entries show per team */
         }
       }
     },
@@ -845,6 +862,75 @@ new Chart(document.getElementById('criteriaBar'), {
     }
   }
 });
+
+/* ================= CRITERIA AVERAGES BY TEAM BAR ================= */
+let teamBarSelection = "Brotherhood";
+const teamBarChipsEl = document.getElementById('teamBarChips');
+const teamBarChipEls = [];
+
+function teamCriteriaStats(team) {
+  const rows = DATA.rows.filter(r => r.team === team);
+  const stats = LABELS.map((label, i) => {
+    const vals = rows.map(r => r.scores[i]);
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    return { label, avg: +avg.toFixed(3), min: Math.min(...vals), max: Math.max(...vals) };
+  });
+  return stats.sort((a,b) => a.avg - b.avg);
+}
+
+const teamCriteriaBarChart = new Chart(document.getElementById('teamCriteriaBar'), {
+  type: 'bar',
+  data: { labels: [], datasets: [{ data: [], backgroundColor: '', borderColor: '', borderWidth:1, borderRadius:4, barThickness:22 }] },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio:false,
+    plugins: {
+      legend: { display:false },
+      tooltip: { callbacks: { label: (item) => {
+        const s = teamCriteriaBarChart._stats[item.dataIndex];
+        return `avg ${s.avg.toFixed(2)}  ·  range ${s.min.toFixed(2)}–${s.max.toFixed(2)}`;
+      } } }
+    },
+    scales: {
+      x: { min:7, max:10, grid:{color:'#e0e0da'}, ticks:{color:'#8b8f99', font:{size:10}} },
+      y: { grid:{display:false}, ticks:{color:'#5b5f6a', font:{size:11}} }
+    }
+  }
+});
+
+function renderTeamCriteriaBar() {
+  const stats = teamCriteriaStats(teamBarSelection);
+  const c = TEAM_HEX[teamBarSelection];
+  teamCriteriaBarChart._stats = stats;
+  teamCriteriaBarChart.data.labels = stats.map(s => s.label);
+  teamCriteriaBarChart.data.datasets[0].data = stats.map(s => s.avg);
+  teamCriteriaBarChart.data.datasets[0].backgroundColor = hexAlpha(c, '8c');
+  teamCriteriaBarChart.data.datasets[0].borderColor = c;
+  teamCriteriaBarChart.update();
+}
+
+TEAMS.forEach(team => {
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.textContent = team;
+  const c = TEAM_HEX[team];
+  const paint = () => {
+    const on = teamBarSelection === team;
+    chip.classList.toggle('active', on);
+    chip.style.background = on ? (c + '1f') : 'transparent';
+    chip.style.borderColor = on ? c : 'var(--border)';
+    chip.style.color = on ? c : 'var(--text-muted)';
+  };
+  chip.addEventListener('click', () => {
+    teamBarSelection = team;
+    teamBarChipEls.forEach(p => p());
+    renderTeamCriteriaBar();
+  });
+  teamBarChipsEl.appendChild(chip);
+  teamBarChipEls.push(paint);
+});
+teamBarChipEls.forEach(p => p());
+renderTeamCriteriaBar();
 
 /* ================= TEAM EVOLUTION SPARKLINES ================= */
 const SERIES_ABBR = {
